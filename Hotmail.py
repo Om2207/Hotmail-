@@ -7,7 +7,7 @@ from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 
 # Telegram bot token
-BOT_TOKEN = '.7222570421:AAEOcp133IxVFESRaDJtXSD4eJY12e6--OY'
+BOT_TOKEN = '7222570421:AAFB87OdWftos5_K-k84qmQMppKPo3j26W4'
 
 # Configure logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -56,7 +56,11 @@ def check_email_inbox(email_user, email_pass, targets):
         except:
             results[target] = 0
 
-    mail.logout()
+    try:
+        mail.logout()
+    except imaplib.IMAP4.error:
+        pass  # Ignore logout errors
+
     return results
 
 def filter_combos(file_path):
