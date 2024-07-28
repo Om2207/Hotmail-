@@ -17,11 +17,11 @@ logger = logging.getLogger(__name__)
 TARGETS = [
     "instagram.com", "netflix.com", "spotify.com", "paypal.com",
     "cash.app", "adobe.com", "facebook.com", "coinbase.com",
-    "binance.com", "eezy.com", "digitalocean.com", "supercell.com"
+    "binance.com", "eezy.com", "digitalocean.com", "supercell.com", "twitter.com"
 ]
 
 def start(update: Update, _: CallbackContext) -> None:
-    update.message.reply_text('Hi! Send me your combo file (email:password) and I will check the inbox for specific targets.')
+    update.message.reply_text('Hi! Send me your Hotmail - Gmail combo file (email:password) and I will check the inbox for specific targets. Author:@rundilundlegamera')
 
 def help_command(update: Update, _: CallbackContext) -> None:
     update.message.reply_text('Send me a text file with email:password pairs, and I will check the inbox for specific targets.')
@@ -94,7 +94,7 @@ def handle_document(update: Update, _: CallbackContext) -> None:
         response_text += "━━━━━━━━[𝗜𝗡𝗕𝗢𝗫 📥]━━━━━━━━\n"
         for target, count in data.items():
             response_text += f"{target}: {count} emails\n"
-        response_text += "\nAuthor: @runilundlegamera\n\n"
+        response_text += "\nAuthor: @rundilundlegamera\n\n"
 
     output_file_path = 'result.txt'
     with open(output_file_path, 'w') as output_file:
@@ -114,5 +114,5 @@ def main():
     updater.idle()
 
 if __name__ == '__main__':
-    print("Telegram Bot by @runilundlegamera")
+    print("Telegram Bot by @rundilundlegamera")
     main()
